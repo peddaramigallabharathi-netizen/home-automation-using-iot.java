@@ -1,0 +1,60 @@
+const int LIGHT_PIN = 8;
+const int FAN_PIN = 9;
+
+void setup() {
+  pinMode(LIGHT_PIN, OUTPUT);
+  pinMode(FAN_PIN, OUTPUT);
+
+  digitalWrite(LIGHT_PIN, LOW);
+  digitalWrite(FAN_PIN, LOW);
+
+  Serial.begin(9600);
+
+  Serial.println("HOME AUTOMATION READY");
+}
+
+void loop() {
+
+  if (Serial.available() > 0) {
+
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+
+    if (command == "LIGHT_ON") {
+      digitalWrite(LIGHT_PIN, HIGH);
+      Serial.println("LIGHT:ON");
+    }
+
+    else if (command == "LIGHT_OFF") {
+      digitalWrite(LIGHT_PIN, LOW);
+      Serial.println("LIGHT:OFF");
+    }
+
+    else if (command == "FAN_ON") {
+      digitalWrite(FAN_PIN, HIGH);
+      Serial.println("FAN:ON");
+    }
+
+    else if (command == "FAN_OFF") {
+      digitalWrite(FAN_PIN, LOW);
+      Serial.println("FAN:OFF");
+    }
+
+    else if (command == "STATUS") {
+
+      Serial.print("LIGHT:");
+      Serial.println(
+        digitalRead(LIGHT_PIN) ? "ON" : "OFF"
+      );
+
+      Serial.print("FAN:");
+      Serial.println(
+        digitalRead(FAN_PIN) ? "ON" : "OFF"
+      );
+    }
+
+    else {
+      Serial.println("UNKNOWN COMMAND");
+    }
+  }
+}
